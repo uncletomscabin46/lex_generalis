@@ -1,0 +1,86 @@
+{
+  "legal": [
+    {
+      "name": "Brandon Fleischman",
+      "role": "CEO & Partner",
+      "bar": "Admitted to practice in NY, PA",
+      "photo": "assets/img/team/brandon-fleischman.png",
+      "linkedin": "https://www.linkedin.com/in/brandon-fleischman-ab0b6115/",
+      "wpSlug": "brandon-fleischman"
+    },
+    {
+      "name": "Carin Sears",
+      "role": "Partner",
+      "bar": "Admitted to practice in VA, GA · Registered Patent Attorney, USPTO",
+      "photo": "assets/img/team/carin-sears.png",
+      "linkedin": "https://www.linkedin.com/in/carinmillerphd/",
+      "wpSlug": "carin-sears"
+    },
+    {
+      "name": "John Sears",
+      "role": "Partner",
+      "bar": "Admitted to practice in AZ, GA · Registered Patent Attorney, USPTO",
+      "photo": "assets/img/team/john-sears.png",
+      "linkedin": "https://www.linkedin.com/in/jssears/",
+      "wpSlug": "john-sears"
+    },
+    {
+      "name": "John Eatman",
+      "role": "Senior Associate",
+      "bar": "Admitted to practice in GA",
+      "photo": "assets/img/team/john-eatman.png",
+      "linkedin": "https://www.linkedin.com/in/jeatman/",
+      "wpSlug": null
+    },
+    {
+      "name": "Chiderah Azodoh",
+      "role": "Associate, Corporate",
+      "bar": "Admitted to practice in NY and Nigeria",
+      "photo": "assets/img/team/chiderah-azodoh.webp",
+      "linkedin": "https://www.linkedin.com/in/chiderah-azodoh-642591a5/",
+      "wpSlug": "chiderah-azodoh"
+    },
+    {
+      "name": "Chenae Byrd",
+      "role": "Paralegal",
+      "bar": "",
+      "photo": "assets/img/team/chenae-byrd.png",
+      "linkedin": "https://www.linkedin.com/in/chenae-monique-b-69a78222/",
+      "wpSlug": null
+    }
+  ],
+  "operations": [
+    {
+      "name": "Whitney Haring-Smith",
+      "role": "Executive Chairman",
+      "bar": "",
+      "photo": "assets/img/team/whitney-haring-smith.png",
+      "linkedin": "https://www.linkedin.com/in/wharings/",
+      "wpSlug": null
+    },
+    {
+      "name": "Katie Messner",
+      "role": "Vice President of Operations",
+      "bar": "",
+      "photo": "assets/img/team/katie-messner.jpeg",
+      "linkedin": "https://www.linkedin.com/in/katieannemessner/",
+      "wpSlug": null
+    },
+    {
+      "name": "Cathryn Paine",
+      "role": "Board Member",
+      "bar": "",
+      "photo": "assets/img/team/cathryn-paine.jpg",
+      "linkedin": "https://www.linkedin.com/in/cathryn-paine/",
+      "wpSlug": null
+    },
+    {
+      "name": "Jenna Abelli",
+      "role": "Board Member",
+      "bar": "",
+      "photo": "assets/img/team/jenna-abelli.png",
+      "linkedin": "https://www.linkedin.com/in/jenna-abelli/",
+      "wpSlug": null
+    }
+  ]
+}
