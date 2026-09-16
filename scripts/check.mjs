@@ -18,10 +18,19 @@ let failures = 0;
 const pass = (m) => console.log(`  ok    ${m}`);
 const fail = (m) => { console.log(`  FAIL  ${m}`); failures++; };
 
-async function listHtml() {
-  const entries = await fs.readdir(ROOT, { withFileTypes: true });
-  return entries.filter((e) => e.isFile() && e.name.endsWith(".html"))
-                .map((e) => e.name).sort();
+const SKIP_DIRS = new Set([".git", "node_modules", "scripts"]);
+
+/* Every .html in the project, as a path relative to the project root. */
+async function listHtml(dir = ROOT, prefix = "") {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const found = [];
+  for (const e of entries) {
+    if (e.name.startsWith(".") || SKIP_DIRS.has(e.name)) continue;
+    const rel = prefix ? `${prefix}/${e.name}` : e.name;
+    if (e.isDirectory()) found.push(...(await listHtml(path.join(dir, e.name), rel)));
+    else if (e.name.endsWith(".html")) found.push(rel);
+  }
+  return found.sort();
 }
 
 /* --------------------------------------------------- 1. scripts parse --- */
@@ -72,7 +81,10 @@ for (const page of pages) {
     if (/^(https?:|mailto:|tel:|data:|#|\/\/)/.test(ref)) continue;
     const target = ref.split(/[?#]/)[0];
     if (!target) continue;
-    await fs.access(path.join(ROOT, target))
+    const base = target.startsWith("/")
+      ? path.join(ROOT, target)
+      : path.resolve(ROOT, path.dirname(page), target);
+    await fs.access(base)
       .catch(() => { fail(`${page} → ${target} does not exist`); missing++; });
   }
   if (!missing) pass(`${page} — ${refs.length} references resolve`);
@@ -82,6 +94,7 @@ for (const page of pages) {
 
 console.log("\nStructure");
 for (const page of pages) {
+  if (page.startsWith("design/")) { pass(`${page} (design reference, not a site page)`); continue; }
   const html = await fs.readFile(path.join(ROOT, page), "utf8");
   const problems = [];
   if (!/<title>/.test(html)) problems.push("no <title>");

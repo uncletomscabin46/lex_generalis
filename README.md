@@ -14,6 +14,7 @@ assets/js/        config.js · wp.js (WordPress client) · site.js (page behavio
 assets/img/       Logo, favicons, headshots, service photography
 data/team.json    Team roster
 scripts/          dev.mjs (dev server) · check.mjs (sanity checks)
+design/fonts.html Typeface comparison — a reference page, not part of the site
 ```
 
 ## Running it locally
@@ -153,10 +154,33 @@ each page — which is plain HTML — is unaffected.
 
 ## Notes on the design
 
-- **Typefaces.** EB Garamond for headings and display, Inter for body and
-  interface text. The old site used Divi's default Open Sans throughout. A
-  serif carries the authority expected of a law firm, while Inter keeps body
-  copy and navigation modern and highly legible.
+- **Typefaces.** Newsreader for headings and display, Inter for body and
+  interface text. The old site used Divi's default Open Sans throughout.
+
+  Eleven pairings were rendered against the real pages and compared. Newsreader
+  won on two counts: it holds genuine weight at display sizes, where a Garamond
+  goes delicate and starts to blend into body copy, and it is narrow enough
+  that long article subheads stay on one line — the wider faces wrapped them.
+  It also has optical sizing, so it is drawn differently for a 72px headline
+  than for a 17px subhead rather than being scaled.
+
+  The three runners-up are kept in `design/fonts.html`. Open
+  <http://localhost:3000/design/fonts.html> with the dev server running and
+  click between them to see each one set in the firm's own words:
+
+  | Option | Character |
+  | --- | --- |
+  | **Newsreader** (in use) | Modern editorial authority |
+  | Libre Baskerville | The most traditionally legal — sturdy, American, wider |
+  | Source Serif 4 + Source Sans 3 | Institutional and understated |
+  | EB Garamond | What the site used before — elegant, but softer hierarchy |
+
+  Each option carries its own size and tracking compensation, because the same
+  pixel size looks markedly different across these faces. To switch, copy the
+  option's settings into `--display` / `--sans` in `assets/css/style.css` and
+  update the Google Fonts `<link>` in the five page files — or just say which
+  one you want. `design/fonts.html` is a reference page, not part of the site;
+  nothing links to it and it can be deleted.
 - **Logo.** The supplied wordmark is white-on-transparent and only worked on a
   dark background. `logo-dark.png` is a navy recolour for the light header;
   `logo-light.png` is the original, trimmed, for the dark footer. Both are

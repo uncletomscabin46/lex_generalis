@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Typeface options · Lex Generalis</title>
+<link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400&family=Source+Sans+3:wght@400;500;600&family=EB+Garamond:ital,wght@0,400..700;1,400..600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  .switcher {
+    position: sticky; top: 0; z-index: 80;
+    background: var(--ink); color: #fff;
+    padding: 12px max(16px, env(safe-area-inset-left)) 12px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  }
+  .switcher__inner {
+    max-width: var(--shell); margin-inline: auto;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .switcher__label {
+    font-family: var(--sans); font-size: .7rem; font-weight: 600;
+    letter-spacing: .17em; text-transform: uppercase;
+    color: #fff; margin: 0 8px 0 0;
+  }
+  .opt {
+    font-family: var(--sans); font-size: .76rem; font-weight: 500;
+    color: #C6CDD8; background: transparent;
+    border: 1px solid rgba(255,255,255,.28); border-radius: 3px;
+    padding: 7px 13px; cursor: pointer;
+  }
+  .opt:hover { border-color: #fff; color: #fff; }
+  .opt[aria-pressed="true"] { background: #fff; color: var(--ink); border-color: #fff; }
+  .note {
+    font-family: var(--sans); font-size: .78rem; color: var(--muted);
+    max-width: 62ch; margin: 0;
+  }
+  .specimen { padding-block: 34px 48px; }
+  .specimen + .specimen { border-top: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <div class="switcher__inner">
+    <p class="switcher__label">Typeface</p>
+    <button class="opt" data-key="newsreader" aria-pressed="true">Newsreader <span>(in use)</span></button>
+    <button class="opt" data-key="baskerville" aria-pressed="false">Libre Baskerville</button>
+    <button class="opt" data-key="sourceserif" aria-pressed="false">Source Serif 4</button>
+    <button class="opt" data-key="garamond" aria-pressed="false">EB Garamond (previous)</button>
+  </div>
+</div>
+
+<section class="specimen">
+  <div class="shell">
+    <p class="note" id="blurb"></p>
+  </div>
+</section>
+
+<section class="specimen">
+  <div class="shell" style="text-align:center">
+    <div class="hero__mark"></div>
+    <h1>Business-first legal counsel for the people building what&rsquo;s next.</h1>
+    <p class="lede" style="max-width:60ch;margin-inline:auto;color:var(--muted)">
+      Corporate law, intellectual property, and general counsel for startups,
+      research institutions, and venture capital investors.</p>
+    <p style="margin-top:1.6rem"><a class="btn btn--solid" href="#">Let&rsquo;s Connect</a></p>
+  </div>
+</section>
+
+<section class="specimen">
+  <div class="shell split">
+    <div>
+      <p class="eyebrow">About</p>
+      <h2>About Lex Generalis</h2>
+    </div>
+    <div class="prose">
+      <p>At Lex Generalis, we understand the unique challenges faced by startups, research
+        institutions, and venture capital investors. Founded by venture capitalists and led by a
+        team of experienced investors, entrepreneurs, engineers, and scientists, we bring a
+        business-first approach to legal services.</p>
+      <h3>Why taking money is more consequential than it seems</h3>
+      <p>When a friend, a family member, or an early-believer hands you money to support your
+        idea, it can feel like a personal gesture, and in some ways it is. But from a legal and
+        business perspective, what they are doing is making an investment.</p>
+      <h4>Fund formation &amp; investment management:</h4>
+      <ul>
+        <li>Structuring venture capital funds, side letters and co-investment vehicles</li>
+        <li>Patent portfolio development and global prosecution</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="specimen">
+  <div class="shell">
+    <p class="eyebrow rule-eyebrow">Legal Professionals</p>
+    <div class="grid grid--4" style="margin-top:1.6rem">
+      <div class="person">
+        <h3 class="person__name">Brandon Fleischman</h3>
+        <p class="person__role">CEO &amp; Partner</p>
+        <p class="person__bar">Admitted to practice in NY, PA</p>
+      </div>
+      <div class="person">
+        <h3 class="person__name">Carin Sears</h3>
+        <p class="person__role">Partner</p>
+        <p class="person__bar">Admitted to practice in VA, GA &middot; Registered Patent Attorney, USPTO</p>
+      </div>
+      <div class="person">
+        <h3 class="person__name">Chiderah Azodoh</h3>
+        <p class="person__role">Associate, Corporate</p>
+        <p class="person__bar">Admitted to practice in NY and Nigeria</p>
+      </div>
+      <div class="person">
+        <h3 class="person__name">John Sears</h3>
+        <p class="person__role">Partner</p>
+        <p class="person__bar">Admitted to practice in AZ, GA</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="specimen">
+  <div class="shell" style="max-width:860px">
+    <div class="post-card" style="border-top:1px solid var(--rule)">
+      <p class="post-card__meta">September 15, 2026 &middot; by Chiderah Azodoh, Corporate Associate</p>
+      <h2 class="post-card__title">From Idea to Investible Company: Part Three &mdash; Your First Raise</h2>
+      <div class="post-card__excerpt"><p>In the first two articles in this series, we covered why
+        forming a company matters, why a C-corp is typically the right structure for a
+        venture-backed startup, and what your lawyer puts in place when you incorporate.</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Each option compensates for the face's x-height and width so the
+   comparison is fair — the same px size looks very different across these. */
+var OPTIONS = {
+  newsreader: {
+    display: "'Newsreader', Georgia, serif",
+    sans: "'Inter', system-ui, sans-serif",
+    tweak: "h1,h2,h3,h4{letter-spacing:-.015em;font-weight:500}" +
+           "h1{font-size:clamp(2.7rem,6.2vw,4.5rem)}",
+    blurb: "Newsreader — currently in use. A contemporary text serif with optical sizing: " +
+           "it keeps real weight at display sizes, and its narrower fit stops long article " +
+           "subheads from wrapping."
+  },
+  baskerville: {
+    display: "'Libre Baskerville', Georgia, serif",
+    sans: "'Inter', system-ui, sans-serif",
+    tweak: "h1,h2,h3,h4{letter-spacing:-.022em;font-weight:400;line-height:1.16}" +
+           "h1{font-size:clamp(2.1rem,4.7vw,3.35rem)}" +
+           "h2{font-size:clamp(1.6rem,3vw,2.15rem)}" +
+           ".post-card__title{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.28}" +
+           ".person__name{font-size:1.08rem}",
+    blurb: "Libre Baskerville — the most traditionally legal of the four. Sturdy and " +
+           "American. It runs wide, so headings are set smaller to compensate, and long " +
+           "subheads still wrap onto two lines."
+  },
+  sourceserif: {
+    display: "'Source Serif 4', Georgia, serif",
+    sans: "'Source Sans 3', system-ui, sans-serif",
+    tweak: "body{font-size:18px}h1,h2,h3,h4{letter-spacing:-.014em;font-weight:500}",
+    blurb: "Source Serif 4 with Source Sans 3 — institutional and understated, the pairing " +
+           "you would expect from a university or a bank. Quieter than the others; body copy " +
+           "is set a little larger because the sans runs small."
+  },
+  garamond: {
+    display: "'EB Garamond', Georgia, serif",
+    sans: "'Inter', system-ui, sans-serif",
+    tweak: "",
+    blurb: "EB Garamond — what the site used previously. Elegant and literary, but delicate " +
+           "at these sizes: headings sit close in weight to body copy, so the hierarchy is " +
+           "softer."
+  }
+};
+
+var style = document.createElement('style');
+document.head.appendChild(style);
+
+function apply(key) {
+  var o = OPTIONS[key];
+  document.documentElement.style.setProperty('--display', o.display);
+  document.documentElement.style.setProperty('--sans', o.sans);
+  style.textContent = o.tweak;
+  document.getElementById('blurb').textContent = o.blurb;
+  document.querySelectorAll('.opt').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.dataset.key === key));
+  });
+  try { localStorage.setItem('lg-font', key); } catch (e) {}
+}
+
+document.querySelectorAll('.opt').forEach(function (b) {
+  b.addEventListener('click', function () { apply(b.dataset.key); });
+});
+
+var saved = 'newsreader';
+try { saved = localStorage.getItem('lg-font') || 'newsreader'; } catch (e) {}
+apply(OPTIONS[saved] ? saved : 'newsreader');
+</script>
+</body>
+</html>
