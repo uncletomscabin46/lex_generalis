@@ -1,0 +1,16 @@
+{
+  "name": "lex-generalis-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static website for Lex Generalis, with blog posts and attorney bios read live from the WordPress REST API.",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "start": "node scripts/dev.mjs",
+    "check": "node scripts/check.mjs",
+    "build": "node -e \"console.log('No build step — the files in this folder are what gets deployed.')\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}

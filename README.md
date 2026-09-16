@@ -13,19 +13,35 @@ assets/css/       Stylesheet
 assets/js/        config.js · wp.js (WordPress client) · site.js (page behaviour)
 assets/img/       Logo, favicons, headshots, service photography
 data/team.json    Team roster
+scripts/          dev.mjs (dev server) · check.mjs (sanity checks)
 ```
 
 ## Running it locally
 
-Open a terminal in this folder and run:
-
 ```sh
-python3 -m http.server 8000
+npm run dev
 ```
 
-Then visit <http://localhost:8000>. A server is required — opening
-`index.html` from the filesystem directly will not work, because the browser
-blocks `fetch()` on `file://` URLs.
+Then visit <http://localhost:3000>. The page reloads by itself when you save a
+file — edit a stylesheet and the new styles appear without losing your place
+on the page.
+
+There is nothing to `npm install`. The dev server is a single file,
+`scripts/dev.mjs`, written against Node's standard library, so it works
+offline and there is no `node_modules` folder to keep up to date. Node 18 or
+newer is required; `.nvmrc` pins the version if you use `nvm`.
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server with live reload |
+| `npm run dev -- --port 8080` | Same, on a different port |
+| `npm run check` | Verify the scripts parse, `team.json` is valid, and every file a page links to exists |
+| `npm run build` | Nothing — there is no build step. Kept so the command doesn't fail if a host calls it |
+
+A server is required either way: opening `index.html` straight from the
+filesystem will not work, because browsers block `fetch()` on `file://` URLs.
+If you would rather not use Node, `python3 -m http.server 8000` also works,
+just without live reload.
 
 ## Deploying
 
