@@ -14,6 +14,8 @@ import vm from "node:vm";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+const exists = (f) => fs.access(f).then(() => true, () => false);
+
 let failures = 0;
 const pass = (m) => console.log(`  ok    ${m}`);
 const fail = (m) => { console.log(`  FAIL  ${m}`); failures++; };
@@ -84,8 +86,14 @@ for (const page of pages) {
     const base = target.startsWith("/")
       ? path.join(ROOT, target)
       : path.resolve(ROOT, path.dirname(page), target);
-    await fs.access(base)
-      .catch(() => { fail(`${page} → ${target} does not exist`); missing++; });
+
+    /* Links are extensionless because Vercel serves the site with cleanUrls,
+       so "/blog" has to resolve to blog.html and "/" to index.html — the
+       same way scripts/dev.mjs resolves them locally. */
+    const ok = await exists(base)
+      || await exists(base + ".html")
+      || await exists(path.join(base, "index.html"));
+    if (!ok) { fail(`${page} → ${target} does not exist`); missing++; }
   }
   if (!missing) pass(`${page} — ${refs.length} references resolve`);
 }

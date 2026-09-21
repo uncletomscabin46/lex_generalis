@@ -9,6 +9,8 @@ attorneys.html    Attorneys index
 attorney.html     Single attorney profile  (?slug=brandon-fleischman)
 blog.html         Blog index, paginated
 post.html         Single article          (?slug=…)
+404.html          Not-found page
+vercel.json       Vercel config — routing, headers, CSP
 assets/css/       Stylesheet
 assets/js/        config.js · wp.js (WordPress client) · site.js (page behaviour)
 assets/img/       Logo, favicons, headshots, service photography
@@ -45,10 +47,50 @@ filesystem will not work, because browsers block `fetch()` on `file://` URLs.
 If you would rather not use Node, `python3 -m http.server 8000` also works,
 just without live reload.
 
-## Deploying
+## Deploying to Vercel
 
-Upload the whole folder to any static host — Netlify, Cloudflare Pages, GitHub
-Pages, S3, or the existing web host. There is nothing to compile.
+The repository is configured for Vercel. Import it at
+<https://vercel.com/new>, pick this repo, and deploy — every setting Vercel
+asks for is already answered by `vercel.json`:
+
+- **Framework preset:** Other. There is no build step, so `outputDirectory`
+  is the repository root and the files are served exactly as they sit here.
+- **Clean URLs** are on, so pages are served as `/blog` and `/attorneys`
+  rather than `/blog.html`. Internal links are written that way already, so
+  navigation never takes a redirect hop. Turn this off by setting
+  `cleanUrls` to `false` — the `.html` paths keep working either way.
+- **`404.html`** is served for unknown paths.
+- **`.vercelignore`** keeps local-only material out of the deployment:
+  `scripts/`, `design/`, `content/`, `node_modules/` and this README.
+
+Pushing to `main` deploys to production; any other branch gets a preview URL.
+
+### Headers
+
+`vercel.json` sets security headers on every response, including a Content
+Security Policy. The policy matters here because the site injects HTML that
+comes from WordPress: `script-src 'self'` means that even if something
+unexpected made it through the sanitiser in `wp.js`, the browser will not run
+it. The policy allows Google Fonts for styles and fonts, and
+`www.lexgeneralis.com` for API calls.
+
+It was verified by serving the site locally through these exact headers and
+loading every page — no violations, fonts loading, WordPress content loading.
+If you add an embed, an analytics tag or an inline `<script>`, expect the CSP
+to block it until you add that source to the policy.
+
+Caching is deliberately short (an hour for assets, five minutes for
+`data/team.json`, revalidate-always for HTML). Filenames are not
+content-hashed — `hero-1920.webp` keeps its name when you replace the
+photograph — so a long cache would leave visitors on a stale image. If you
+want aggressive caching later, add a version to the filenames first.
+
+## Deploying anywhere else
+
+Nothing about the site is Vercel-specific: it is plain files. Upload the
+folder to Netlify, Cloudflare Pages, GitHub Pages, S3, or the existing web
+host. Only `vercel.json` would need translating, and only for the clean URLs
+and headers.
 
 ---
 

@@ -5,7 +5,7 @@ window.LG_CONFIG = {
      headers (WordPress does this by default for public GET requests). */
   wpBase: "https://www.lexgeneralis.com/wp-json/wp/v2",
 
-  /* Posts shown per page on /blog.html */
+  /* Posts shown per page on /blog */
   postsPerPage: 10,
 
   /* Where attorney bios come from.

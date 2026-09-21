@@ -1,0 +1,7 @@
+# Local tooling and reference material — not part of the deployed site.
+node_modules
+scripts
+design
+content
+README.md
+.nvmrc

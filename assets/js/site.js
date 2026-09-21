@@ -65,7 +65,7 @@
 
     var links = [];
     if (linkable && p.wpSlug) {
-      links.push('<a href="attorney.html?slug=' + encodeURIComponent(p.wpSlug) + '">Profile</a>');
+      links.push('<a href="/attorney?slug=' + encodeURIComponent(p.wpSlug) + '">Profile</a>');
     }
     if (p.linkedin) {
       links.push('<a href="' + esc(p.linkedin) + '" target="_blank" rel="noopener noreferrer">LinkedIn</a>');
@@ -77,7 +77,7 @@
     if (linkable && p.wpSlug) {
       return el("a", {
         class: "person",
-        href: "attorney.html?slug=" + encodeURIComponent(p.wpSlug)
+        href: "/attorney?slug=" + encodeURIComponent(p.wpSlug)
       }, inner);
     }
     return el("div", { class: "person" }, inner);
@@ -113,7 +113,7 @@
   /* ------------------------------------------------------- blog index --- */
 
   function postCard(p) {
-    var card = el("a", { class: "post-card", href: "post.html?slug=" + encodeURIComponent(p.slug) });
+    var card = el("a", { class: "post-card", href: "/post?slug=" + encodeURIComponent(p.slug) });
     card.innerHTML =
       '<p class="post-card__meta">' + esc(p.dateLabel) + "</p>" +
       '<h2 class="post-card__title">' + esc(p.title) + "</h2>" +
@@ -152,12 +152,12 @@
         if (pager && res.totalPages > 1) {
           pager.innerHTML = "";
           if (page > 1) {
-            pager.appendChild(el("a", { class: "btn", href: "blog.html?page=" + (page - 1) }, "← Newer"));
+            pager.appendChild(el("a", { class: "btn", href: "/blog?page=" + (page - 1) }, "← Newer"));
           }
           pager.appendChild(el("span", { class: "article-meta" },
             "Page " + page + " of " + res.totalPages));
           if (page < res.totalPages) {
-            pager.appendChild(el("a", { class: "btn", href: "blog.html?page=" + (page + 1) }, "Older →"));
+            pager.appendChild(el("a", { class: "btn", href: "/blog?page=" + (page + 1) }, "Older →"));
           }
         }
       })
@@ -175,7 +175,7 @@
     if (!mount) return;
 
     var slug = param("slug");
-    if (!slug) { window.location.replace("blog.html"); return; }
+    if (!slug) { window.location.replace("/blog"); return; }
 
     mount.innerHTML =
       '<div class="skeleton sk-line" style="width:60%"></div>' +
@@ -243,7 +243,7 @@
     if (!mount) return;
 
     var slug = param("slug");
-    if (!slug) { window.location.replace("attorneys.html"); return; }
+    if (!slug) { window.location.replace("/attorneys"); return; }
 
     mount.innerHTML =
       '<div class="skeleton sk-line"></div><div class="skeleton sk-line"></div>' +

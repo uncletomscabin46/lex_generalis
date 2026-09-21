@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Attorney Profile &middot; Lex Generalis</title>
-<meta name="description" content="Attorney profile at Lex Generalis.">
+<title>Page not found &middot; Lex Generalis</title>
+<meta name="description" content="The page you were looking for could not be found.">
+<meta name="robots" content="noindex">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="256x256" href="assets/img/favicon.png">
 <link rel="apple-touch-icon" href="assets/img/favicon-180.png">
@@ -14,7 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body data-page="attorney">
+<body data-page="404">
 
 <header class="masthead">
   <div class="shell masthead__inner">
@@ -22,7 +23,7 @@
       <img src="assets/img/logo-dark.png" alt="Lex Generalis">
     </a>
     <nav class="nav" aria-label="Primary">
-      <a href="/attorneys" aria-current="page">Attorneys</a>
+      <a href="/attorneys">Attorneys</a>
       <a href="/blog">Blog</a>
     </nav>
     <div class="masthead__end">
@@ -32,26 +33,21 @@
 </header>
 
 <main>
-
-  <section class="section" style="padding-top:clamp(40px,6vw,72px)">
+  <section class="hero" style="padding-block:clamp(72px,11vw,140px) clamp(56px,8vw,96px)">
     <div class="shell">
-      <p style="margin-bottom:2rem">
-        <a class="arrow-link arrow-link--back" href="/attorneys"><span>&larr;</span> All attorneys</a>
+      <div class="hero__mark"></div>
+      <p class="eyebrow" style="justify-content:center">Error 404</p>
+      <h1 style="max-width:20ch">This page could not be found.</h1>
+      <p class="lede" style="max-width:52ch;margin-inline:auto">
+        The link may be out of date, or the page may have moved.</p>
+      <p style="margin-top:2rem">
+        <a class="btn btn--solid" href="/">Back to the home page</a>
       </p>
-
-      <div class="bio-layout">
-        <aside class="bio-aside">
-          <img id="bio-photo" src="" alt="">
-          <h1 id="bio-name" style="font-size:clamp(1.9rem,3.4vw,2.4rem)">Loading&hellip;</h1>
-          <p id="bio-role" class="person__role"></p>
-          <p id="bio-bar" class="person__bar"></p>
-        </aside>
-
-        <div id="bio-body" class="prose"></div>
-      </div>
+      <p style="margin-top:1.5rem">
+        <a class="arrow-link" href="/blog">Read the blog <span>&rarr;</span></a>
+      </p>
     </div>
   </section>
-
 </main>
 
 <footer class="footer">
