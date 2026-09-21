@@ -23,7 +23,7 @@ design/fonts.html Typeface comparison — a reference page, not part of the site
 npm run dev
 ```
 
-Then visit <http://localhost:3000>. The page reloads by itself when you save a
+Then visit <http://localhost:8001>. The page reloads by itself when you save a
 file — edit a stylesheet and the new styles appear without losing your place
 on the page.
 
@@ -34,8 +34,8 @@ newer is required; `.nvmrc` pins the version if you use `nvm`.
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Start the dev server with live reload |
-| `npm run dev -- --port 8080` | Same, on a different port |
+| `npm run dev` | Start the dev server on port 8001, with live reload |
+| `npm run dev -- --port 8080` | Same, on a different port (`PORT=8080 npm run dev` also works). If the port is busy it steps to the next free one — trust the URL it prints |
 | `npm run check` | Verify the scripts parse, `team.json` is valid, and every file a page links to exists |
 | `npm run build` | Nothing — there is no build step. Kept so the command doesn't fail if a host calls it |
 
@@ -165,7 +165,7 @@ each page — which is plain HTML — is unaffected.
   than for a 17px subhead rather than being scaled.
 
   The three runners-up are kept in `design/fonts.html`. Open
-  <http://localhost:3000/design/fonts.html> with the dev server running and
+  <http://localhost:8001/design/fonts.html> with the dev server running and
   click between them to see each one set in the firm's own words:
 
   | Option | Character |

@@ -5,8 +5,8 @@
  * changes. Uses only Node's standard library — nothing to install, and it
  * keeps working offline.
  *
- *   npm run dev              → http://localhost:3000
- *   npm run dev -- --port 8080
+ *   npm run dev              → http://localhost:8001
+ *   npm run dev -- --port 8080   (or PORT=8080 npm run dev)
  */
 
 import http from "node:http";
@@ -27,7 +27,7 @@ function readPort() {
     (i !== -1 && args[i + 1]) ||
     args.find((a) => a.startsWith("--port="))?.split("=")[1] ||
     process.env.PORT ||
-    "3000";
+    "8001";
   const port = Number.parseInt(raw, 10);
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     console.error(`Invalid port: ${raw}`);
