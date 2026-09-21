@@ -187,4 +187,18 @@ each page — which is plain HTML — is unaffected.
   generated from `logo.png`, which is kept as the source.
 - **Favicon.** The wordmark is roughly 14:1 and unreadable at 32px, so the
   favicon is an "LG" monogram instead.
+- **Hero image.** The Supreme Court photograph is carried over from the
+  original site, where it was the first section's parallax background. It is
+  served at two widths in WebP with JPEG fallbacks, and the untouched original
+  is kept as `assets/img/hero-source.jpg`.
+
+  It sits under an ivory scrim that resolves to solid `--paper` at the bottom,
+  so the hero still reads as part of the light palette and hands off to the
+  next section with no seam. The hero lede uses a darker slate than `--muted`:
+  measured against the lightest stonework, `--muted` came to about 4.3:1,
+  under the 4.5:1 this text size needs. The replacement measures 6.1:1.
+
+  The photo is on the home page only, via the `hero--photo` class. Add that
+  class to any other `.hero` to extend it — interior pages currently request
+  no hero image at all.
 - **Homepage copy** is carried over from the existing site unchanged.

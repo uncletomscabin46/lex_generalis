@@ -198,9 +198,68 @@ p:last-child { margin-bottom: 0; }
 
 /* --------------------------------------------------------------- Hero --- */
 
+/* Base hero: the clean ivory treatment used by the interior page headers. */
 .hero {
   padding-block: clamp(72px, 12vw, 150px) clamp(56px, 8vw, 96px);
   text-align: center;
+}
+
+/* Photographic hero — the Supreme Court image carried over from the original
+   site, currently on the home page only. Add `hero--photo` to any other
+   `.hero` to extend it; nothing else needs to change.
+
+   The building sits right of centre and the frame is bright, so the photo is
+   offset to keep the colonnade in view and laid under an ivory scrim. The
+   headline stays navy on a light ground, as everywhere else on the site, and
+   the scrim resolves to solid --paper at the bottom so the hero hands off to
+   the section below with no visible seam. */
+.hero--photo {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(96px, 14vw, 186px) clamp(80px, 10vw, 128px);
+  background-color: var(--paper);
+}
+
+.hero--photo::before,
+.hero--photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero--photo::before {
+  z-index: -2;
+  background-image: url("../img/hero-1200.jpg");
+  background-image: image-set(
+    url("../img/hero-1200.webp") type("image/webp"),
+    url("../img/hero-1200.jpg") type("image/jpeg")
+  );
+  background-size: cover;
+  background-position: 62% 42%;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 900px) {
+  .hero--photo::before {
+    background-image: url("../img/hero-1920.jpg");
+    background-image: image-set(
+      url("../img/hero-1920.webp") type("image/webp"),
+      url("../img/hero-1920.jpg") type("image/jpeg")
+    );
+  }
+}
+
+.hero--photo::after {
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(251, 250, 247, 0.86) 0%,
+      rgba(251, 250, 247, 0.80) 42%,
+      rgba(251, 250, 247, 0.90) 78%,
+      rgba(251, 250, 247, 1) 100%
+    );
 }
 
 .hero h1 {
@@ -213,6 +272,13 @@ p:last-child { margin-bottom: 0; }
   margin-inline: auto;
   color: var(--muted);
 }
+
+/* Must come after `.hero .lede` — same specificity, so source order decides.
+   --muted only reaches ~4.3:1 against the lightest part of the stonework,
+   short of the 4.5:1 this text size needs. This darker slate measures 6.1:1
+   at the worst rendered pixel while staying clearly lighter than the
+   headline, so the hierarchy survives. */
+.hero--photo .lede { color: #454E5D; }
 
 .hero__mark {
   width: 56px;
