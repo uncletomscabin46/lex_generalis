@@ -14,6 +14,7 @@ assets/js/        config.js · wp.js (WordPress client) · site.js (page behavio
 assets/img/       Logo, favicons, headshots, service photography
 data/team.json    Team roster
 scripts/          dev.mjs (dev server) · check.mjs (sanity checks)
+                  make-hero.py (regenerate hero image derivatives)
 design/fonts.html Typeface comparison — a reference page, not part of the site
 ```
 
@@ -201,4 +202,31 @@ each page — which is plain HTML — is unaffected.
   The photo is on the home page only, via the `hero--photo` class. Add that
   class to any other `.hero` to extend it — interior pages currently request
   no hero image at all.
+
+  **To swap in a different photograph:**
+
+  ```sh
+  python3 scripts/make-hero.py path/to/new-photo.jpg
+  ```
+
+  That regenerates all four derivatives plus the kept original, under the
+  names the stylesheet already references, so no code change is needed.
+  One thing usually does need a look afterwards: `background-position` in
+  the `.hero--photo::before` rule is currently `62% 42%` (and `70% 52%` on
+  narrow screens) because this photo's subject sits right of centre. A
+  different composition will want a different value. The scrim is also
+  weighted for a bright image — a darker photo may need less of it, and the
+  contrast figures above are worth re-checking if you change it.
+
+- **Header.** Opaque at the very top, fading to fully transparent at its lower
+  edge, so the hero photograph runs up underneath it. Both the tint and the
+  blur sit on a masked pseudo-element: `backdrop-filter` applies evenly across
+  its whole box, so without a matching mask the blur would stop on a hard line
+  exactly where the tint had faded to nothing.
+
+- **Footer.** Copyright left, email centred, address right, with Privacy Policy
+  and Terms of Use centred beneath. The outer columns are equal-width (`1fr auto
+  1fr`) so the email sits on the true centre of the page rather than midway
+  between its neighbours. Below 720px the three stack and centre, with the
+  email first and the copyright last.
 - **Homepage copy** is carried over from the existing site unchanged.

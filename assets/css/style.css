@@ -123,18 +123,41 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------- Header --- */
 
+/* Translucent header: opaque at the very top, fading to nothing at its lower
+   edge so the hero photograph runs up underneath it. The tint and the blur
+   are both carried on a masked pseudo-element — a backdrop-filter applies
+   evenly across its whole box, so without the matching mask the blur would
+   stop on a hard line exactly where the tint has faded out. */
 .masthead {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(251, 250, 247, 0.92);
-  backdrop-filter: saturate(150%) blur(10px);
-  border-bottom: 1px solid var(--rule);
+  background: transparent;
   padding-top: env(safe-area-inset-top, 0px);
+}
+
+.masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(251, 250, 247, 0.97) 0%,
+    rgba(251, 250, 247, 0.92) 45%,
+    rgba(251, 250, 247, 0.68) 76%,
+    rgba(251, 250, 247, 0) 100%
+  );
+  backdrop-filter: saturate(140%) blur(7px);
+  -webkit-backdrop-filter: saturate(140%) blur(7px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
 }
 
 /* Logo left · nav centered · spacer right keeps nav optically centered */
 .masthead__inner {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -253,12 +276,21 @@ p:last-child { margin-bottom: 0; }
 .hero--photo::after {
   z-index: -1;
   background:
+    /* vertical: open at the top, resolving to solid --paper at the bottom */
     linear-gradient(
       to bottom,
-      rgba(251, 250, 247, 0.86) 0%,
-      rgba(251, 250, 247, 0.80) 42%,
-      rgba(251, 250, 247, 0.90) 78%,
+      rgba(251, 250, 247, 0.30) 0%,
+      rgba(251, 250, 247, 0.42) 34%,
+      rgba(251, 250, 247, 0.84) 70%,
+      rgba(251, 250, 247, 0.97) 90%,
       rgba(251, 250, 247, 1) 100%
+    ),
+    /* horizontal: extra lift behind the headline on the left */
+    linear-gradient(
+      to right,
+      rgba(251, 250, 247, 0.62) 0%,
+      rgba(251, 250, 247, 0.28) 46%,
+      rgba(251, 250, 247, 0) 78%
     );
 }
 
@@ -285,6 +317,31 @@ p:last-child { margin-bottom: 0; }
   height: 1px;
   background: var(--accent);
   margin: 0 auto 2rem;
+}
+
+/* Photographic hero: headline sits at the bottom left, over the open sky
+   rather than centred in it. Must follow the rules above — each ties on
+   specificity, so source order decides. */
+.hero--photo {
+  display: flex;
+  align-items: flex-end;
+  min-height: min(88vh, 820px);
+  text-align: left;
+}
+.hero--photo > .shell { width: 100%; }
+.hero--photo .hero__mark { margin: 0 0 1.5rem; }
+.hero--photo h1 { max-width: 19ch; margin-inline: 0; }
+.hero--photo .lede { max-width: 48ch; margin-inline: 0; }
+
+/* On a narrow, tall viewport `cover` crops the landscape photo hard, so a
+   full-height hero leaves a large empty band of sky above the headline.
+   Shorten it and pan further into the building. */
+@media (max-width: 620px) {
+  .hero--photo {
+    min-height: min(74vh, 620px);
+    padding-block: clamp(72px, 16vw, 104px) clamp(48px, 9vw, 68px);
+  }
+  .hero--photo::before { background-position: 70% 52%; }
 }
 
 /* -------------------------------------------------------------- Prose --- */
@@ -559,43 +616,58 @@ a.person:hover .person__frame img,
 .footer {
   background: var(--ink);
   color: #B9C0CC;
-  padding-block: clamp(48px, 6vw, 72px) calc(28px + env(safe-area-inset-bottom, 0px));
-  font-size: 0.9rem;
+  padding-block: clamp(34px, 4.5vw, 52px)
+                 calc(clamp(28px, 3.5vw, 40px) + env(safe-area-inset-bottom, 0px));
+  font-size: 0.85rem;
 }
 .footer a { color: #DCE0E7; text-decoration: none; }
 .footer a:hover { color: var(--accent-dim); }
+.footer p { margin: 0; }
 
-.footer__top {
+/* Copyright left · email centred · address right. The outer columns are equal
+   so the email lands on the true centre of the page, not between its
+   neighbours. */
+.footer__row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 34px;
-  padding-bottom: 34px;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 16px 28px;
 }
-.footer__logo img { width: 196px; max-width: 100%; height: auto; opacity: 0.92; }
 
-.footer h4 {
-  font-family: var(--sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.17em;
-  text-transform: uppercase;
-  color: #FFF;
-  margin: 0 0 12px;
-}
-.footer ul { list-style: none; margin: 0; padding: 0; }
-.footer li { margin-bottom: 7px; }
+.footer__copy { justify-self: start; text-align: left; }
+.footer__email { justify-self: center; text-align: center; }
+.footer__address { justify-self: end; text-align: right; line-height: 1.5; }
 
-.footer__base {
-  padding-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 24px;
-  justify-content: space-between;
+.footer__legal {
+  margin-top: clamp(22px, 3vw, 32px);
+  padding-top: clamp(18px, 2.5vw, 26px);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  text-align: center;
   font-size: 0.8rem;
   color: #8C95A4;
 }
-.footer__base a { color: #8C95A4; }
+.footer__legal a { color: #8C95A4; }
+.footer__legal a:hover { color: var(--accent-dim); }
+.footer__sep { padding-inline: 10px; opacity: 0.55; }
+
+/* Stacked and centred once three columns no longer fit. */
+@media (max-width: 720px) {
+  .footer__row {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+  .footer__copy,
+  .footer__email,
+  .footer__address {
+    justify-self: center;
+    text-align: center;
+  }
+  .footer__copy { order: 3; }
+  .footer__email { order: 1; }
+  .footer__address { order: 2; }
+}
 
 /* -------------------------------------------------------- Responsive --- */
 
