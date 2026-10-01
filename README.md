@@ -17,6 +17,7 @@ assets/img/       Logo, favicons, headshots, service photography
 data/team.json    Team roster
 scripts/          dev.mjs (dev server) · check.mjs (sanity checks)
                   make-hero.py (regenerate hero image derivatives)
+                  normalize-headshots.py (white backgrounds on portraits)
 design/fonts.html Typeface comparison — a reference page, not part of the site
 ```
 
@@ -230,6 +231,27 @@ each page — which is plain HTML — is unaffected.
   generated from `logo.png`, which is kept as the source.
 - **Favicon.** The wordmark is roughly 14:1 and unreadable at 32px, so the
   favicon is an "LG" monogram instead.
+- **Team headshots.** Every portrait sits on white. Some of the source images
+  were cut-outs saved with a transparent background, which let the section
+  colour show through — so those sat on ivory while the studio shots sat on
+  white. `scripts/normalize-headshots.py` composites any transparent portrait
+  onto white (run it with no arguments for a report, `--write` to apply), and
+  `.person__frame` is white so the same mismatch cannot reappear.
+
+  A portrait photographed against a real background cannot be fixed this way
+  and needs re-shooting or cutting out; the script reports those rather than
+  mangling them.
+
+- **Blog bylines.** Author names and titles come from the `authors` field that
+  the PublishPress Authors plugin adds to every post — not WordPress's own
+  `author` field, which points at one shared account here and carries no name.
+  Each entry's `display_name` is already in "Name, Title" form.
+
+  An author whose name has no space in it is treated as the site's own account
+  rather than a person and is skipped, so a post filed that way shows no byline
+  instead of printing an account handle. Setting a real author on that post in
+  WordPress makes the byline appear with no code change.
+
 - **Hero image.** The Supreme Court photograph is carried over from the
   original site, where it was the first section's parallax background. It is
   served at two widths in WebP with JPEG fallbacks, and the untouched original

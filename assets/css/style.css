@@ -305,6 +305,10 @@ p:last-child { margin-bottom: 0; }
   color: var(--muted);
 }
 
+/* With no standfirst under it, the heading's bottom margin leaves a gap with
+   nothing in it — as on the blog index. */
+.hero h1:last-child { margin-bottom: 0; }
+
 /* Must come after `.hero .lede` — same specificity, so source order decides.
    --muted only reaches ~4.3:1 against the lightest part of the stonework,
    short of the 4.5:1 this text size needs. This darker slate measures 6.1:1
@@ -471,7 +475,9 @@ p:last-child { margin-bottom: 0; }
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: var(--radius);
-  background: var(--paper-alt);
+  /* White, to match the studio backgrounds in the headshots themselves — this
+     is what shows through if a portrait is ever a transparent cut-out. */
+  background: #FFFFFF;
   margin-bottom: 14px;
 }
 .person__frame img {
@@ -547,6 +553,17 @@ a.person:hover .person__frame img,
 .post-card:hover .post-card__title { color: var(--accent); }
 .post-card__excerpt { color: var(--muted); margin: 0; max-width: 70ch; }
 .post-card__excerpt p { margin: 0; }
+
+/* Author line beneath each blog entry. */
+.post-card__byline {
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.byline__name { font-weight: 500; }
+.byline__role { color: var(--muted); }
+.byline__and { color: var(--muted); padding-inline: 6px; }
 
 /* ------------------------------------------------------- Article page --- */
 

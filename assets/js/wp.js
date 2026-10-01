@@ -209,6 +209,27 @@
     return byline;
   }
 
+  /* Authors come from the PublishPress Authors plugin's `authors` array, not
+     WordPress's own `author` field — that one points at a single shared
+     account on this site and carries no name. Each entry's display_name is
+     already "Name, Title", which is what the blog shows.
+
+     An entry with no space in its name is the site's own account rather than
+     a person (the earliest post is filed that way), so it is skipped: better
+     to show no byline than to print an account handle. */
+  function mapAuthors(p) {
+    var list = Array.isArray(p.authors) ? p.authors : [];
+    return list
+      .map(function (a) { return String((a && a.display_name) || "").trim(); })
+      .filter(function (name) { return name && /\s/.test(name); })
+      .map(function (name) {
+        var at = name.indexOf(",");
+        return at === -1
+          ? { name: name, role: "" }
+          : { name: name.slice(0, at).trim(), role: name.slice(at + 1).trim() };
+      });
+  }
+
   function mapPost(p) {
     var title = decodeEntities((p.title && p.title.rendered) || "Untitled");
     var clean = sanitize((p.content && p.content.rendered) || "");
@@ -224,6 +245,7 @@
       title: title,
       date: p.date,
       dateLabel: formatDate(p.date),
+      authors: mapAuthors(p),
       byline: byline,
       excerpt: stripTags((p.excerpt && p.excerpt.rendered) || ""),
       content: root.innerHTML.trim(),
@@ -286,7 +308,7 @@
         per_page: opts.perPage || CFG.postsPerPage || 10,
         search: opts.search,
         _embed: "wp:featuredmedia",
-        _fields: "id,slug,date,link,title,excerpt,_links,_embedded"
+        _fields: "id,slug,date,link,title,excerpt,authors,_links,_embedded"
       }).then(function (r) {
         return {
           posts: r.body.map(mapPost),

@@ -112,12 +112,23 @@
 
   /* ------------------------------------------------------- blog index --- */
 
+  /* "Jane Doe, Partner" — name in ink, role beside it in muted. */
+  function bylineHtml(authors) {
+    if (!authors || !authors.length) return "";
+    var parts = authors.map(function (a) {
+      return '<span class="byline__name">' + esc(a.name) + "</span>" +
+             (a.role ? '<span class="byline__role">, ' + esc(a.role) + "</span>" : "");
+    });
+    return '<p class="post-card__byline">' + parts.join('<span class="byline__and">and</span>') + "</p>";
+  }
+
   function postCard(p) {
     var card = el("a", { class: "post-card", href: "/post?slug=" + encodeURIComponent(p.slug) });
     card.innerHTML =
       '<p class="post-card__meta">' + esc(p.dateLabel) + "</p>" +
       '<h2 class="post-card__title">' + esc(p.title) + "</h2>" +
-      '<div class="post-card__excerpt"><p>' + esc(p.excerpt) + "</p></div>";
+      '<div class="post-card__excerpt"><p>' + esc(p.excerpt) + "</p></div>" +
+      bylineHtml(p.authors);
     return card;
   }
 
@@ -189,7 +200,14 @@
         var dateEl = $("#post-date");
         if (titleEl) titleEl.textContent = p.title;
         if (dateEl) {
-          dateEl.textContent = [p.dateLabel, p.byline].filter(Boolean).join(" \u00b7 ");
+          /* Prefer the structured author over the byline scraped from the
+             post body — the body line is not present on every article. */
+          var who = (p.authors && p.authors.length)
+            ? p.authors.map(function (a) {
+                return a.role ? a.name + ", " + a.role : a.name;
+              }).join(" and ")
+            : (p.byline || "").replace(/^by\s+/i, "");
+          dateEl.textContent = [p.dateLabel, who].filter(Boolean).join(" \u00b7 ");
         }
 
         var head = $("#post-head");
