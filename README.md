@@ -238,6 +238,12 @@ each page — which is plain HTML — is unaffected.
   onto white (run it with no arguments for a report, `--write` to apply), and
   `.person__frame` is white so the same mismatch cannot reappear.
 
+  The same script also trims dark hairlines off a portrait's edges. One photo
+  carried a single black pixel column down its right side and another along
+  the bottom, left over from however it was exported; scaled into the square
+  frame that read as a stray line beside the portrait. It only ever removes up
+  to four lines per edge, so it cannot eat into the picture itself.
+
   A portrait photographed against a real background cannot be fixed this way
   and needs re-shooting or cutting out; the script reports those rather than
   mangling them.
