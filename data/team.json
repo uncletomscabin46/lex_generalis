@@ -11,7 +11,7 @@
     {
       "name": "Carin Sears",
       "role": "Partner",
-      "bar": "Admitted to practice in VA, GA · Registered Patent Attorney, USPTO",
+      "bar": "Admitted to practice in VA, GA \u00b7 Registered Patent Attorney, USPTO",
       "photo": "assets/img/team/carin-sears.png",
       "linkedin": "https://www.linkedin.com/in/carinmillerphd/",
       "wpSlug": "carin-sears"
@@ -19,7 +19,7 @@
     {
       "name": "John Sears",
       "role": "Partner",
-      "bar": "Admitted to practice in AZ, GA · Registered Patent Attorney, USPTO",
+      "bar": "Admitted to practice in AZ, GA \u00b7 Registered Patent Attorney, USPTO",
       "photo": "assets/img/team/john-sears.png",
       "linkedin": "https://www.linkedin.com/in/jssears/",
       "wpSlug": "john-sears"
@@ -39,14 +39,6 @@
       "photo": "assets/img/team/chiderah-azodoh.webp",
       "linkedin": "https://www.linkedin.com/in/chiderah-azodoh-642591a5/",
       "wpSlug": "chiderah-azodoh"
-    },
-    {
-      "name": "Chenae Byrd",
-      "role": "Paralegal",
-      "bar": "",
-      "photo": "assets/img/team/chenae-byrd.png",
-      "linkedin": "https://www.linkedin.com/in/chenae-monique-b-69a78222/",
-      "wpSlug": null
     }
   ],
   "operations": [

@@ -90,14 +90,33 @@
     mount.appendChild(grid);
   }
 
+  function fetchTeam() {
+    return fetch("/data/team.json")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  }
+
+  /* The roster is the source of truth for titles. A WordPress bio page can
+     disagree with it — Brandon's says "Partner" where the firm lists him as
+     CEO & Partner — and the two appearing differently on the same site reads
+     as an error, so the roster wins wherever it has an entry. */
+  function rosterEntry(team, slug) {
+    if (!team) return null;
+    var all = [].concat(team.legal || [], team.operations || []);
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].wpSlug === slug) return all[i];
+    }
+    return null;
+  }
+
   function loadTeam(opts) {
     var legalMount = $(opts.legal);
     var opsMount = opts.operations ? $(opts.operations) : null;
 
-    return fetch("data/team.json")
-      .then(function (r) {
-        if (!r.ok) throw new Error("Could not load team.json");
-        return r.json();
+    return fetchTeam()
+      .then(function (data) {
+        if (!data) throw new Error("Could not load team.json");
+        return data;
       })
       .then(function (data) {
         if (legalMount) renderRoster(legalMount, data.legal || [], opts.linkable);
@@ -267,16 +286,21 @@
       '<div class="skeleton sk-line"></div><div class="skeleton sk-line"></div>' +
       '<div class="skeleton sk-line" style="width:70%"></div>';
 
-    WP.getAttorneyBySlug(slug)
-      .then(function (a) {
+    Promise.all([WP.getAttorneyBySlug(slug), fetchTeam()])
+      .then(function (results) {
+        var a = results[0];
+        var listed = rosterEntry(results[1], slug);
+        var role = (listed && listed.role) || a.role;
+        var bar = (listed && listed.bar) || a.bar;
+
         document.title = a.name + " · Lex Generalis";
         $("#bio-name").textContent = a.name;
 
         var roleEl = $("#bio-role");
-        if (a.role) roleEl.textContent = a.role; else roleEl.hidden = true;
+        if (role) roleEl.textContent = role; else roleEl.hidden = true;
 
         var barEl = $("#bio-bar");
-        if (a.bar) barEl.textContent = a.bar; else barEl.hidden = true;
+        if (bar) barEl.textContent = bar; else barEl.hidden = true;
 
         var photoEl = $("#bio-photo");
         if (a.photo) { photoEl.src = a.photo; photoEl.alt = a.name; }

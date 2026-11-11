@@ -248,6 +248,19 @@ each page — which is plain HTML — is unaffected.
   and needs re-shooting or cutting out; the script reports those rather than
   mangling them.
 
+- **Titles on bio pages.** `data/team.json` is the source of truth for job
+  titles. Where a WordPress bio page disagrees with it, the roster wins — the
+  same person showing two different titles on one site reads as a mistake.
+  Changing someone's title means editing `data/team.json`; the bio page
+  follows.
+
+- **Bullet lists in bios.** WordPress wraps several of the bio lists in a list
+  item that holds nothing but the list itself (`<ul><li><ul><li>…`). The empty
+  outer item still draws a bullet, which showed as a stray marker above an
+  indented list. `flattenLists` in `wp.js` lifts the inner items up a level
+  and drops the empty rung. A parent that has text of its own is a real
+  sub-list and is left nested.
+
 - **Blog bylines.** Author names and titles come from the `authors` field that
   the PublishPress Authors plugin adds to every post — not WordPress's own
   `author` field, which points at one shared account here and carries no name.

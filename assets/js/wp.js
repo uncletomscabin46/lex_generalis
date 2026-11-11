@@ -93,6 +93,46 @@
     });
   }
 
+  /* WordPress wraps several of the bio lists in a list item that holds nothing
+     but the list itself:
+
+         <ul><li><ul><li>real item</li>…</ul></li></ul>
+
+     The empty outer item still draws its own bullet, so the page shows a
+     stray marker sitting above an indented list — the "doubled up" bullets.
+     Lifting the inner items up one level removes the redundant rung. A parent
+     that has text of its own is a genuine sub-list and is left alone. */
+  function flattenLists(root) {
+    var guard = 0;
+    while (guard++ < 80) {
+      var found = null;
+      var items = root.querySelectorAll("li");
+
+      for (var i = 0; i < items.length; i++) {
+        var li = items[i];
+        var nested = li.querySelector("ul, ol");
+        if (!nested || nested.parentNode !== li) continue;
+
+        var withoutLists = li.cloneNode(true);
+        Array.prototype.forEach.call(
+          withoutLists.querySelectorAll("ul, ol"),
+          function (n) { n.parentNode.removeChild(n); }
+        );
+        if (withoutLists.textContent.replace(/\s+/g, "")) continue;
+
+        found = { li: li, nested: nested };
+        break;
+      }
+
+      if (!found) break;
+      var parent = found.li.parentNode;
+      while (found.nested.firstChild) {
+        parent.insertBefore(found.nested.firstChild, found.li);
+      }
+      parent.removeChild(found.li);
+    }
+  }
+
   function sanitize(html) {
     var doc = new DOMParser().parseFromString(
       "<div id='r'>" + (html || "") + "</div>", "text/html"
@@ -103,6 +143,7 @@
       .forEach(function (n) { n.remove(); });
 
     promoteHeadings(root);
+    flattenLists(root);
 
     /* Unwrap anything that isn't on the allow-list, keeping its children. */
     var guard = 0;
