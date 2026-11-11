@@ -1,7 +1,6 @@
-# Local tooling and reference material — not part of the deployed site.
+# Excluded from the deployment. scripts/ and content/ are NOT listed here:
+# the build runs on Vercel and reads both.
 node_modules
-scripts
 design
-content
 README.md
 .nvmrc

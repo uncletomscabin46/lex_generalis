@@ -1,0 +1,27 @@
+{
+  "title": "Lex Generalis \u00b7 Business-First Counsel for Startups, Research Institutions & Investors",
+  "description": "Lex Generalis is a law firm founded by venture capitalists, delivering business-first counsel in corporate law, intellectual property, and general legal matters.",
+  "heroHeading": "Business-first legal counsel for the people building what\u2019s next.",
+  "heroLede": "Corporate law, intellectual property, and general counsel for startups, research institutions, and venture capital investors.",
+  "aboutHeading": "About Lex Generalis",
+  "about": "At Lex Generalis, we understand the unique challenges faced by startups, research institutions, and venture capital investors. Founded by venture capitalists and led by a team of experienced investors, entrepreneurs, engineers, and scientists, we bring a business-first approach to legal services. Our firm leverages the latest technologies to provide highly efficient, cost-effective counsel in corporate law, intellectual property, and general legal matters. Whether structuring deals, securing IP rights, or navigating complex transactions, we deliver strategic, practical solutions that align with the business goals of our clients. We don\u2019t just advise\u2014we partner with our clients to drive innovation, protect valuable assets, and accelerate growth.",
+  "services": [
+    {
+      "title": "General Counsel",
+      "image": "assets/img/services/general-counsel.jpg",
+      "text": "Day-to-day legal partnership for companies that need judgment, not just paperwork."
+    },
+    {
+      "title": "Corporate Law",
+      "image": "assets/img/services/corporate-law.jpg",
+      "text": "Formation, financings, governance, and the transactions that move a business forward."
+    },
+    {
+      "title": "Intellectual Property",
+      "image": "assets/img/services/intellectual-property.jpg",
+      "text": "Securing and defending the ideas at the center of innovation-driven companies."
+    }
+  ],
+  "teamHeading": "Experience on both sides of the table.",
+  "team": "At Lex Generalis, our team brings together a diverse group of legal professionals with deep experience in areas such as finance, technology, and research. We have firsthand experience navigating the complexities of innovation-driven industries. With backgrounds spanning corporate finance, restructuring, venture investments, intellectual property strategy, and technology commercialization, we provide practical, business-focused legal solutions. We understand the challenges our clients face because we\u2019ve been in their shoes\u2014as founders, investors, and researchers\u2014and we use that experience to deliver tailored, strategic counsel that drives success."
+}

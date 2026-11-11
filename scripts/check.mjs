@@ -10,7 +10,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import vm from "node:vm";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -21,6 +20,10 @@ const pass = (m) => console.log(`  ok    ${m}`);
 const fail = (m) => { console.log(`  FAIL  ${m}`); failures++; };
 
 const SKIP_DIRS = new Set([".git", "node_modules", "scripts"]);
+
+/* design/ is a local reference page, excluded from the deployment by
+   .vercelignore, so the rules about shipped pages do not apply to it. */
+const isSitePage = (p) => !p.startsWith("design/");
 
 /* Every .html in the project, as a path relative to the project root. */
 async function listHtml(dir = ROOT, prefix = "") {
@@ -37,15 +40,60 @@ async function listHtml(dir = ROOT, prefix = "") {
 
 /* --------------------------------------------------- 1. scripts parse --- */
 
-console.log("\nBrowser scripts");
-for (const name of ["config.js", "wp.js", "site.js"]) {
-  const file = path.join(ROOT, "assets/js", name);
-  try {
-    new vm.Script(await fs.readFile(file, "utf8"), { filename: file });
-    pass(`assets/js/${name} parses`);
-  } catch (err) {
-    fail(`assets/js/${name}: ${err.message}`);
+console.log("\nNo client-side rendering");
+{
+  const pages = (await listHtml()).filter(isSitePage);
+  let scripted = [];
+  for (const page of pages) {
+    const html = await fs.readFile(path.join(ROOT, page), "utf8");
+    /* JSON-LD is data, not code — anything else means text could be arriving
+       after load, which is what made the old pages uncrawlable. */
+    const tags = [...html.matchAll(/<script([^>]*)>/g)].map((m) => m[1]);
+    if (tags.some((t) => !/type=["']application\/ld\+json["']/.test(t))) scripted.push(page);
   }
+  scripted.length
+    ? fail(`pages still running JavaScript: ${scripted.join(", ")}`)
+    : pass(`${pages.length} pages ship no executable JavaScript`);
+}
+
+console.log("\nCrawlable text");
+{
+  const MIN = 120;
+  for (const page of (await listHtml()).filter(isSitePage)) {
+    if (page === "404.html") continue;
+    const raw = await fs.readFile(path.join(ROOT, page), "utf8");
+    const body = raw.replace(/<head[\s\S]*?<\/head>/i, "")
+                    .replace(/<script[\s\S]*?<\/script>/gi, "")
+                    .replace(/<[^>]+>/g, " ");
+    const words = body.split(/\s+/).filter(Boolean).length;
+    words < MIN
+      ? fail(`${page} has only ${words} words of text in the HTML`)
+      : pass(`${page} — ${words} words in the HTML`);
+  }
+}
+
+console.log("\nSearch metadata");
+{
+  const titles = new Map();
+  for (const page of (await listHtml()).filter(isSitePage)) {
+    const html = await fs.readFile(path.join(ROOT, page), "utf8");
+    const problems = [];
+    const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1];
+    if (!title) problems.push("no <title>");
+    else {
+      if (titles.has(title)) problems.push(`title duplicates ${titles.get(title)}`);
+      titles.set(title, page);
+    }
+    if (!/name="description"/.test(html)) problems.push("no meta description");
+    if (page !== "404.html" && !/rel="canonical"/.test(html)) problems.push("no canonical");
+    if (page !== "404.html" && !/property="og:title"/.test(html)) problems.push("no Open Graph");
+    problems.length ? fail(`${page}: ${problems.join(", ")}`) : pass(`${page} metadata complete`);
+  }
+}
+
+console.log("\nCrawler files");
+for (const f of ["sitemap.xml", "robots.txt"]) {
+  (await exists(path.join(ROOT, f))) ? pass(f) : fail(`${f} missing`);
 }
 
 /* ------------------------------------------------------ 2. data files --- */
@@ -109,7 +157,6 @@ for (const page of pages) {
   if (!/class="masthead"/.test(html)) problems.push("no header");
   if (!/class="footer"/.test(html)) problems.push("no footer");
   if (!/name="viewport"/.test(html)) problems.push("no viewport meta");
-  if (!/data-page="/.test(html)) problems.push("no data-page attribute");
   problems.length ? fail(`${page}: ${problems.join(", ")}`) : pass(`${page} is well formed`);
 }
 

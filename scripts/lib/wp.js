@@ -390,6 +390,7 @@
     },
 
     tidyBar: tidyBar,
+    sanitize: sanitize,
     stripTags: stripTags,
     formatDate: formatDate,
     decodeEntities: decodeEntities

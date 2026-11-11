@@ -1,25 +1,61 @@
 # Lex Generalis — website
 
-A static marketing site for Lex Generalis. No build step, no framework, no
-dependencies: the files in this repository are the files that get served.
+A static site for Lex Generalis. Every page is generated as real HTML with its
+text in the file, so search engines and link-preview bots see the whole page
+without running any JavaScript. The site ships **no client-side JavaScript at
+all** and makes **no requests to WordPress** — it is entirely self-contained.
 
 ```
-index.html        Home — hero, About, Services, Team
-attorneys.html    Attorneys index
-attorney.html     Single attorney profile  (?slug=brandon-fleischman)
-blog.html         Blog index, paginated
-post.html         Single article          (?slug=…)
-404.html          Not-found page
-vercel.json       Vercel config — routing, headers, CSP
-assets/css/       Stylesheet
-assets/js/        config.js · wp.js (WordPress client) · site.js (page behaviour)
-assets/img/       Logo, favicons, headshots, service photography
-data/team.json    Team roster
-scripts/          dev.mjs (dev server) · check.mjs (sanity checks)
-                  make-hero.py (regenerate hero image derivatives)
-                  normalize-headshots.py (white backgrounds on portraits)
-design/fonts.html Typeface comparison — a reference page, not part of the site
+content/            The site's text — the source of truth
+  posts/*.json        blog articles
+  attorneys/*.json    profiles
+  pages/*.json        home copy, privacy policy, terms of use
+data/team.json      The team roster: names, titles, photos, ordering
+assets/             Stylesheet, images, fonts
+scripts/
+  build.mjs           generates every page — no dependencies
+  check.mjs           verifies the output
+  dev.mjs             local server with live reload
+  import-wordpress.mjs  the one-time migration out of WordPress
+  lib/                wp.js + config.js, used only by the importer
+*.html              Generated — do not edit by hand; edit content/ and rebuild
+sitemap.xml         Generated
 ```
+
+## Editing the site
+
+Everything lives in `content/` and `data/team.json`. Edit the JSON, run
+`npm run build`, commit. Nothing else needs touching.
+
+| To change | Edit |
+| --- | --- |
+| A blog article | `content/posts/<slug>.json` |
+| An attorney profile | `content/attorneys/<slug>.json` |
+| Home page copy | `content/pages/home.json` |
+| Privacy policy / terms | `content/pages/*.json` |
+| Who is on the team, their titles, order | `data/team.json` |
+
+A new article is a new file in `content/posts/`, following the shape of the
+existing ones. Its `slug` becomes its URL.
+
+## Why it is built this way
+
+The site used to fetch the blog and the profiles from the WordPress API in the
+browser. That had two problems.
+
+**Search engines saw almost nothing.** The HTML held a header and a footer; the
+text arrived afterwards, from JavaScript. An article page served 29 words.
+Google does run JavaScript, but on a slower, less reliable second pass, and
+LinkedIn and Slack link previews do not run it at all. Every article also
+shared one title — "Article · Lex Generalis" — because the real title was set
+by script after load.
+
+**And it depended on WordPress staying up.** Switching WordPress off would have
+left the blog and every profile permanently blank.
+
+Generating the pages ahead of time fixes both. Articles now serve 567–4,573
+words of real text, every page has its own title, description, canonical URL,
+Open Graph tags and structured data, and there is a sitemap.
 
 ## Running it locally
 
@@ -27,7 +63,8 @@ design/fonts.html Typeface comparison — a reference page, not part of the site
 npm run dev
 ```
 
-Then visit <http://localhost:8001>. The page reloads by itself when you save a
+Builds the site, then serves it at <http://localhost:8001>. Use `npm run serve`
+to skip the rebuild, and `npm run build` to rebuild without serving. The page reloads by itself when you save a
 file — edit a stylesheet and the new styles appear without losing your place
 on the page.
 
@@ -47,6 +84,24 @@ A server is required either way: opening `index.html` straight from the
 filesystem will not work, because browsers block `fetch()` on `file://` URLs.
 If you would rather not use Node, `python3 -m http.server 8000` also works,
 just without live reload.
+
+## Migrating off WordPress
+
+`scripts/import-wordpress.mjs` pulled everything across: 10 articles, 5
+profiles, the privacy policy and the terms of use, plus the images they
+reference. It has already been run and its output is committed, so WordPress
+can be switched off.
+
+It is kept for reference only. Re-running it needs `npm i -D jsdom` — that is
+deliberately not a project dependency, so deploys install nothing.
+
+**URLs were preserved exactly.** Articles stay at `/patent-term-adjustment-strategies`
+and profiles at `/brandon-fleischman`, the paths WordPress used, so existing
+links and search rankings carry over. Requests with WordPress's trailing slash
+redirect to the same page.
+
+**Before switching WordPress off**, point the domain at Vercel first and
+confirm the pages load. Once DNS moves, the old site is unreachable.
 
 ## Deploying to Vercel
 
