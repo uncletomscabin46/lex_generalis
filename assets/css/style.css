@@ -487,8 +487,15 @@ p:last-child { margin-bottom: 0; }
   transition: transform 0.5s ease, filter 0.5s ease;
   filter: grayscale(100%) contrast(1.03);
 }
-a.person:hover .person__frame img,
 .person:hover .person__frame img { transform: scale(1.04); filter: grayscale(0%); }
+
+/* The photo links to the profile; it is marked aria-hidden and removed from
+   the tab order so it does not duplicate the name link for keyboard and
+   screen-reader users. */
+a.person__frame { display: block; }
+
+.person__name a { color: inherit; text-decoration: none; }
+.person__name a:hover { color: var(--accent); }
 
 .person__name {
   font-family: var(--display);
@@ -513,7 +520,7 @@ a.person:hover .person__frame img,
 .person__links {
   display: flex;
   gap: 14px;
-  margin-top: 9px;
+  margin-top: 10px;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.1em;

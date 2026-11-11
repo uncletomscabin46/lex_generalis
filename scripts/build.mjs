@@ -147,23 +147,32 @@ ${footer()}
 
 /* ------------------------------------------------------------ fragments --- */
 
+/* The card is a plain container, never a link. Wrapping the whole card in an
+   <a> put the LinkedIn link inside another <a>, which no browser allows: the
+   parser closed the card early and pushed the links out into their own grid
+   cell, leaving a gap beside every portrait. The photo and the name carry the
+   link to the profile instead, and LinkedIn sits below as a sibling. */
 function personCard(p, linked) {
-  const inner =
-    `<div class="person__frame">${
-      p.photo ? `<img src="/${p.photo.replace(/^\//, "")}" alt="${esc(p.name)}" loading="lazy" width="400" height="400">` : ""
-    }</div>` +
-    `<h3 class="person__name">${esc(p.name)}</h3>` +
+  const href = linked && p.wpSlug ? `/${p.wpSlug}` : null;
+
+  const img = p.photo
+    ? `<img src="/${p.photo.replace(/^\//, "")}" alt="${esc(p.name)}" loading="lazy" width="400" height="400">`
+    : "";
+  const frame = href
+    ? `<a class="person__frame" href="${href}" tabindex="-1" aria-hidden="true">${img}</a>`
+    : `<div class="person__frame">${img}</div>`;
+
+  const name = href
+    ? `<h3 class="person__name"><a href="${href}">${esc(p.name)}</a></h3>`
+    : `<h3 class="person__name">${esc(p.name)}</h3>`;
+
+  return `<div class="person">${frame}${name}` +
     `<p class="person__role">${esc(p.role)}</p>` +
-    (p.bar ? `<p class="person__bar">${esc(p.bar)}</p>` : "");
-
-  const links = [];
-  if (linked && p.wpSlug) links.push(`<a href="/${p.wpSlug}">Profile</a>`);
-  if (p.linkedin) links.push(`<a href="${esc(p.linkedin)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
-  const tail = links.length ? `<div class="person__links">${links.join("")}</div>` : "";
-
-  return p.wpSlug && linked
-    ? `<a class="person" href="/${p.wpSlug}">${inner}${tail}</a>`
-    : `<div class="person">${inner}${tail}</div>`;
+    (p.bar ? `<p class="person__bar">${esc(p.bar)}</p>` : "") +
+    (p.linkedin
+      ? `<p class="person__links"><a href="${esc(p.linkedin)}" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>`
+      : "") +
+    `</div>`;
 }
 
 const grid = (people, linked) =>

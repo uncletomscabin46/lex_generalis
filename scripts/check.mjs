@@ -91,6 +91,26 @@ console.log("\nSearch metadata");
   }
 }
 
+console.log("\nMarkup validity");
+{
+  /* A link inside a link is invalid: the parser closes the outer one early and
+     pushes the rest out as a sibling, which silently breaks grid layouts. */
+  let broken = [];
+  for (const page of (await listHtml()).filter(isSitePage)) {
+    const html = await fs.readFile(path.join(ROOT, page), "utf8");
+    const depth = [];
+    let bad = false;
+    for (const m of html.matchAll(/<(\/?)a\b/g)) {
+      if (m[1]) depth.pop();
+      else { if (depth.length) bad = true; depth.push(1); }
+    }
+    if (bad) broken.push(page);
+  }
+  broken.length
+    ? fail(`nested <a> elements in: ${broken.join(", ")}`)
+    : pass("no nested links");
+}
+
 console.log("\nCrawler files");
 for (const f of ["sitemap.xml", "robots.txt"]) {
   (await exists(path.join(ROOT, f))) ? pass(f) : fail(`${f} missing`);
