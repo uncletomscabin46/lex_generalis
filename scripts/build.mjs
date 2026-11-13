@@ -29,6 +29,16 @@ const SITE = {
   street: "5227 N. 7th St., Suite 18056",
 };
 
+/* Tally contact form. Embedded as a plain iframe rather than with Tally's
+   embed.js, so the site keeps shipping no JavaScript of its own. That means no
+   auto-resize, so the height is fixed: the form measures 542px at every width,
+   and the extra room below absorbs validation messages. The background is
+   transparent, so any unused height is just page colour. */
+const TALLY = {
+  id: "1Wdz9L",
+  height: 680,
+};
+
 const FONTS =
   "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;" +
   "1,6..72,400..500&family=Inter:wght@400;500;600&display=swap";
@@ -105,9 +115,10 @@ const header = (current) => `<header class="masthead">
     <nav class="nav" aria-label="Primary">
       <a href="/attorneys"${current === "attorneys" ? ' aria-current="page"' : ""}>Attorneys</a>
       <a href="/blog"${current === "blog" ? ' aria-current="page"' : ""}>Blog</a>
+      <a class="nav__contact" href="/contact"${current === "contact" ? ' aria-current="page"' : ""}>Contact</a>
     </nav>
     <div class="masthead__end">
-      <a class="contact-link" href="mailto:${SITE.email}">Contact</a>
+      <a class="contact-link" href="/contact"${current === "contact" ? ' aria-current="page"' : ""}>Contact</a>
     </div>
   </div>
 </header>`;
@@ -438,6 +449,45 @@ for (const pg of pages.filter((x) => x.slug && x.html)) {
 `));
 }
 
+/* -- contact -------------------------------------------------------------- */
+await emit("contact.html", page({
+  title: "Contact \u00b7 " + SITE.name,
+  description: "Get in touch with Lex Generalis \u2014 business-first legal counsel for startups, research institutions and venture capital investors.",
+  canonical: "/contact",
+  current: "contact",
+  jsonLd: {
+    "@context": "https://schema.org", "@type": "ContactPage",
+    name: "Contact " + SITE.name, url: `${SITE.url}/contact`,
+    about: { "@type": "LegalService", name: SITE.name, url: SITE.url, email: SITE.email },
+  },
+}, `
+  <section class="hero" style="padding-block:clamp(56px,9vw,104px) clamp(28px,4vw,44px)">
+    <div class="shell">
+      <div class="hero__mark"></div>
+      <h1>Contact</h1>
+      <p class="lede">Tell us what you&rsquo;re building, and we&rsquo;ll tell you how we can help.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section" style="padding-block:clamp(40px,6vw,72px)">
+    <div class="shell" style="max-width:720px">
+      <iframe
+        class="tally"
+        src="https://tally.so/embed/${TALLY.id}?alignLeft=1&amp;hideTitle=1&amp;transparentBackground=1"
+        title="Contact ${esc(SITE.name)}"
+        loading="lazy"
+        height="${TALLY.height}"></iframe>
+
+      <p class="tally__fallback">
+        If the form does not load, email us directly at
+        <a href="mailto:${SITE.email}">${SITE.email}</a>.
+      </p>
+    </div>
+  </section>
+`));
+
 /* -- not found ------------------------------------------------------------ */
 await emit("404.html", page({
   title: "Page not found \u00b7 " + SITE.name,
@@ -461,6 +511,7 @@ const urls = [
   { loc: "/", priority: "1.0", changefreq: "monthly" },
   { loc: "/attorneys", priority: "0.9", changefreq: "monthly" },
   { loc: "/blog", priority: "0.9", changefreq: "weekly" },
+  { loc: "/contact", priority: "0.8", changefreq: "yearly" },
   ...attorneys.map((a) => ({ loc: `/${a.slug}`, priority: "0.8", changefreq: "monthly" })),
   ...posts.map((p) => ({ loc: `/${p.slug}`, priority: "0.7", changefreq: "yearly", lastmod: p.date.slice(0, 10) })),
   ...pages.map((p) => ({ loc: `/${p.slug}`, priority: "0.3", changefreq: "yearly" })),
@@ -483,7 +534,10 @@ Sitemap: ${SITE.url}/sitemap.xml
 `);
 
 /* ---------------------------------------------------------------- report --- */
-const thin = out.filter((o) => o.file.endsWith(".html") && o.words < 120 && o.file !== "404.html");
+/* 404 and contact are short by nature — one is an error page, the other is a
+   form. The warning is for content pages that lost their text. */
+const SHORT_BY_DESIGN = new Set(["404.html", "contact.html"]);
+const thin = out.filter((o) => o.file.endsWith(".html") && o.words < 120 && !SHORT_BY_DESIGN.has(o.file));
 console.log(`Built ${out.length} files\n`);
 for (const o of out.filter((o) => o.file.endsWith(".html")).slice(0, 6)) {
   console.log(`  ${o.file.padEnd(62)} ${String(o.words).padStart(5)} words`);

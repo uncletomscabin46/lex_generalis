@@ -208,6 +208,11 @@ p:last-child { margin-bottom: 0; }
 
 .masthead__end { justify-self: end; }
 
+/* Contact sits on the right on desktop. Below 620px that slot is dropped, so
+   this copy takes over inside the centred nav — exactly one of the two is ever
+   visible, so there is never a duplicate link. */
+.nav__contact { display: none; }
+
 .contact-link {
   font-size: 0.72rem;
   font-weight: 600;
@@ -218,6 +223,7 @@ p:last-child { margin-bottom: 0; }
   white-space: nowrap;
 }
 .contact-link:hover { color: var(--accent); }
+.contact-link[aria-current="page"] { color: var(--accent); }
 
 /* --------------------------------------------------------------- Hero --- */
 
@@ -635,6 +641,27 @@ a.person__frame { display: block; }
 .sk-title { height: 30px; width: 62%; margin-bottom: 14px; }
 .sk-sq { aspect-ratio: 1 / 1; margin-bottom: 14px; }
 
+/* ------------------------------------------------- Contact form --- */
+
+/* The Tally form is embedded without its resize script, so the height comes
+   from the `height` attribute. The background is transparent, which lets the
+   page colour show through any unused space below the fields. */
+.tally {
+  display: block;
+  width: 100%;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color-scheme: light;
+}
+
+.tally__fallback {
+  margin: 1.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.tally__fallback a { color: var(--accent); }
+
 /* ------------------------------------------------------------ Footer --- */
 
 .footer {
@@ -702,7 +729,8 @@ a.person__frame { display: block; }
     min-height: 0;
   }
   .brand img { width: 140px; }
-  .nav { grid-column: 1 / -1; justify-self: center; gap: 30px; padding-bottom: 6px; }
+  .nav { grid-column: 1 / -1; justify-self: center; gap: 24px; padding-bottom: 6px; }
+  .nav__contact { display: inline-block; }
   .masthead__end { display: none; }
 }
 

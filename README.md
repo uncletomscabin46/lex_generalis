@@ -286,6 +286,24 @@ each page — which is plain HTML — is unaffected.
   generated from `logo.png`, which is kept as the source.
 - **Favicon.** The wordmark is roughly 14:1 and unreadable at 32px, so the
   favicon is an "LG" monogram instead.
+- **Contact form.** `/contact` embeds a Tally form as a plain `<iframe>`
+  rather than with Tally's `embed.js`, so the site still ships no JavaScript of
+  its own. The trade-off is no auto-resize: the form measures 542px at every
+  width, so the iframe is fixed at 680px and the spare room absorbs validation
+  messages. The background is transparent, so unused height is just page
+  colour. The form ID lives in the `TALLY` constant in `scripts/build.mjs`.
+
+  `frame-src https://tally.so` had to be added to the CSP in `vercel.json` —
+  without it the iframe is blocked silently.
+
+  Below 620px the header's right-hand Contact slot is dropped, so a second copy
+  of the link appears inside the centred nav. Exactly one of the two is visible
+  at any width, so there is never a duplicate.
+
+  **Where submissions go is set in Tally, not here:** form → Settings → Email
+  notifications, where `info@lexgeneralis.com` can be added as a recipient.
+  Free on all plans; only a custom sender domain needs Tally Pro.
+
 - **Team headshots.** Every portrait sits on white. Some of the source images
   were cut-outs saved with a transparent background, which let the section
   colour show through — so those sat on ivory while the studio shots sat on

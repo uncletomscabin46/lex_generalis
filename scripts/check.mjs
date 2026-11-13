@@ -60,7 +60,8 @@ console.log("\nCrawlable text");
 {
   const MIN = 120;
   for (const page of (await listHtml()).filter(isSitePage)) {
-    if (page === "404.html") continue;
+    /* Short by design: an error page and a form page. */
+    if (page === "404.html" || page === "contact.html") continue;
     const raw = await fs.readFile(path.join(ROOT, page), "utf8");
     const body = raw.replace(/<head[\s\S]*?<\/head>/i, "")
                     .replace(/<script[\s\S]*?<\/script>/gi, "")
