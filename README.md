@@ -286,23 +286,27 @@ each page — which is plain HTML — is unaffected.
   generated from `logo.png`, which is kept as the source.
 - **Favicon.** The wordmark is roughly 14:1 and unreadable at 32px, so the
   favicon is an "LG" monogram instead.
-- **Contact form.** `/contact` embeds a Tally form as a plain `<iframe>`
-  rather than with Tally's `embed.js`, so the site still ships no JavaScript of
-  its own. The trade-off is no auto-resize: the form measures 542px at every
-  width, so the iframe is fixed at 680px and the spare room absorbs validation
-  messages. The background is transparent, so unused height is just page
-  colour. The form ID lives in the `TALLY` constant in `scripts/build.mjs`.
+- **Contact.** The Contact link opens a mail client
+  (`mailto:info@lexgeneralis.com`). A real form is planned using a Vercel
+  Serverless Function plus Resend, to be implemented by the web development
+  team. Note that a plain `<form method="post" action="/api/contact">` submits
+  natively, so a form needs no client-side JavaScript; `form-action 'self'` is
+  already allowed by the CSP. Whatever handles it will need spam protection —
+  a honeypot field at minimum.
 
-  `frame-src https://tally.so` had to be added to the CSP in `vercel.json` —
-  without it the iframe is blocked silently.
+- **Mobile navigation.** Below 620px the horizontal nav is replaced by a menu
+  button. It is built on `<details>`/`<summary>`, a native disclosure widget,
+  so it opens and closes and is keyboard and screen-reader accessible without
+  any JavaScript — the site still ships none. The bars fold into a cross when
+  open.
 
-  Below 620px the header's right-hand Contact slot is dropped, so a second copy
-  of the link appears inside the centred nav. Exactly one of the two is visible
-  at any width, so there is never a duplicate.
+  Only one navigation is ever visible: above 620px the inline nav and the
+  right-hand Contact link, below it the menu. Taking the links out of the top
+  row is also what lets the wordmark be legible on a phone — at ~15:1 it was
+  being squeezed to 10px tall beside the nav, and is now 168–208px wide.
 
-  **Where submissions go is set in Tally, not here:** form → Settings → Email
-  notifications, where `info@lexgeneralis.com` can be added as a recipient.
-  Free on all plans; only a custom sender domain needs Tally Pro.
+  One limitation of the no-JavaScript approach: the menu does not close when
+  you tap elsewhere on the page. Tapping the button again closes it.
 
 - **Team headshots.** Every portrait sits on white. Some of the source images
   were cut-outs saved with a transparent background, which let the section

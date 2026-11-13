@@ -36,11 +36,25 @@
     <nav class="nav" aria-label="Primary">
       <a href="/attorneys">Attorneys</a>
       <a href="/blog" aria-current="page">Blog</a>
-      <a class="nav__contact" href="/contact">Contact</a>
     </nav>
     <div class="masthead__end">
-      <a class="contact-link" href="/contact">Contact</a>
+      <a class="contact-link" href="mailto:info@lexgeneralis.com">Contact</a>
     </div>
+
+    <!-- Narrow screens: the wordmark is ~15:1 and was being squeezed to 10px
+         tall next to the nav, so below 620px the links collapse into this
+         menu. <details> is a native disclosure widget: it opens and closes,
+         and is keyboard and screen-reader accessible, without any script. -->
+    <details class="menu">
+      <summary class="menu__toggle" aria-label="Menu" title="Menu">
+        <span class="menu__bars"></span>
+      </summary>
+      <nav class="menu__panel" aria-label="Primary">
+        <a href="/attorneys">Attorneys</a>
+        <a href="/blog" aria-current="page">Blog</a>
+        <a href="mailto:info@lexgeneralis.com">Contact</a>
+      </nav>
+    </details>
   </div>
 </header>
 

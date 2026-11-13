@@ -169,7 +169,10 @@ p:last-child { margin-bottom: 0; }
 /* The wordmark is ~14:1, so size it by width — a height-based rule makes it
    wide enough to crowd the centred nav. */
 .brand img {
-  width: clamp(150px, 16vw, 196px);
+  /* The lower bound is generous because 16vw bottomed out just above the
+     mobile breakpoint, leaving the wordmark smaller on a tablet than on a
+     phone. */
+  width: clamp(184px, 17vw, 204px);
   height: auto;
 }
 
@@ -208,10 +211,85 @@ p:last-child { margin-bottom: 0; }
 
 .masthead__end { justify-self: end; }
 
-/* Contact sits on the right on desktop. Below 620px that slot is dropped, so
-   this copy takes over inside the centred nav — exactly one of the two is ever
-   visible, so there is never a duplicate link. */
-.nav__contact { display: none; }
+/* ----------------------------------------------- Mobile menu --- */
+
+/* Shown only below 620px, where the horizontal nav does not fit beside the
+   wordmark. Built on <details>, so it needs no JavaScript. */
+.menu { display: none; justify-self: end; position: relative; }
+
+.menu__toggle {
+  list-style: none;
+  display: grid;
+  place-items: center;
+  width: 44px;                 /* a comfortable tap target */
+  height: 44px;
+  margin-right: -10px;         /* optically align the bars with the gutter */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu__toggle::-webkit-details-marker { display: none; }
+.menu__toggle::marker { content: ""; }
+.menu__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Three bars: the middle one is the element, the outer two its pseudo-elements. */
+.menu__bars { position: relative; display: block; width: 22px; height: 1.5px; }
+.menu__bars,
+.menu__bars::before,
+.menu__bars::after {
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.22s ease, background-color 0.22s ease;
+}
+.menu__bars::before,
+.menu__bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.menu__bars::before { transform: translateY(-6.5px); }
+.menu__bars::after { transform: translateY(6.5px); }
+
+/* Open: the bars fold into a cross. */
+.menu[open] .menu__bars { background: transparent; }
+.menu[open] .menu__bars::before { transform: rotate(45deg); }
+.menu[open] .menu__bars::after { transform: rotate(-45deg); }
+
+.menu__panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 60;
+  min-width: 11rem;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  /* Opaque: the header itself fades to transparent at its lower edge. */
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 44px -22px rgba(16, 26, 43, 0.45);
+}
+
+.menu__panel a {
+  padding: 12px 16px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.menu__panel a:hover { background: var(--paper-alt); color: var(--accent); }
+.menu__panel a[aria-current="page"] { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu__bars, .menu__bars::before, .menu__bars::after { transition: none; }
+}
+
 
 .contact-link {
   font-size: 0.72rem;
@@ -223,7 +301,6 @@ p:last-child { margin-bottom: 0; }
   white-space: nowrap;
 }
 .contact-link:hover { color: var(--accent); }
-.contact-link[aria-current="page"] { color: var(--accent); }
 
 /* --------------------------------------------------------------- Hero --- */
 
@@ -641,27 +718,6 @@ a.person__frame { display: block; }
 .sk-title { height: 30px; width: 62%; margin-bottom: 14px; }
 .sk-sq { aspect-ratio: 1 / 1; margin-bottom: 14px; }
 
-/* ------------------------------------------------- Contact form --- */
-
-/* The Tally form is embedded without its resize script, so the height comes
-   from the `height` attribute. The background is transparent, which lets the
-   page colour show through any unused space below the fields. */
-.tally {
-  display: block;
-  width: 100%;
-  border: 0;
-  margin: 0;
-  background: transparent;
-  color-scheme: light;
-}
-
-.tally__fallback {
-  margin: 1.5rem 0 0;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-.tally__fallback a { color: var(--accent); }
-
 /* ------------------------------------------------------------ Footer --- */
 
 .footer {
@@ -722,16 +778,18 @@ a.person__frame { display: block; }
 
 @media (max-width: 620px) {
   body { font-size: 16px; }
+  /* Logo left, menu button right, on one row — which lets the wordmark be
+     noticeably larger than when it had to share the row with the nav. */
   .masthead__inner {
     grid-template-columns: 1fr auto;
-    row-gap: 4px;
-    padding-block: 10px;
-    min-height: 0;
+    align-items: center;
+    padding-block: 8px;
+    min-height: 58px;
   }
-  .brand img { width: 140px; }
-  .nav { grid-column: 1 / -1; justify-self: center; gap: 24px; padding-bottom: 6px; }
-  .nav__contact { display: inline-block; }
+  .brand img { width: clamp(168px, 50vw, 208px); }
+  .nav { display: none; }
   .masthead__end { display: none; }
+  .menu { display: block; }
 }
 
 /* Reveal-on-scroll */
